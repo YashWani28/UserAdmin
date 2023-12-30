@@ -3,6 +3,8 @@ const User = require('../models/User');
 const multer = require("multer");
 const fs = require('fs');
 const path = require('path');
+const asyncHandler = require("express-async-handler");
+
 
 const deleteFile = (filePath) => {
     return new Promise((resolve, reject) => {
@@ -25,26 +27,30 @@ const deleteFile = (filePath) => {
 };
 
 
-const validateUser = async(req,res,next)=>{
+const validateUser = asyncHandler(async(req,res,next)=>{
     
     const {email,phone,name,password} = req.body;
     // console.log(email,phone,name,password);
+    let isError=false;
     if((!email && !phone) || !name || !password )
     {
-        res.status(400);
         await deleteFile(req.file.path);
+        res.status(400);
+        isError = true;
         throw new Error("Fields are mandatory");
+        
     }
     const userAvailable = await User.findOne({email:email});
     if(userAvailable)
     {
-        res.status(400);
         await deleteFile(req.file.path);
+        res.status(400);
+        isError = true;
         throw new Error("User already exists");
         
     }
-    next();
-}
+    
+})
 
 module.exports = validateUser;
     

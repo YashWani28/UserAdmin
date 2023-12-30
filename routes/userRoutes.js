@@ -17,10 +17,9 @@ router.post("/signup", (req, res, next) => {
   })
     .then(() => validateUser(req, res, next))
     .then(() => signupUser(req, res))
-    // .catch((error) => {
-    //   // Handle errors
-    //   res.status(500).send("Error during signup: " + error.message);
-    // });
+    .catch((error) => {
+    //   console.log(error); //? uncomment if you wanna see the error
+    });
 });
 
 router.post("/login", loginUser);

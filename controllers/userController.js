@@ -9,30 +9,42 @@ const { upload } = require("../middleware/imageUploads");
 const signupUser = async (req,res) => {
     
     const {email,phone,name,password} = req.body;
-    
-    try{
+   
        
-        const newUser = await User.create({
-            name:name,
-            email:email,
-            phone:phone,
-            imageName:req.file.filename,
-            imagePath:req.file.path,
-            password:password
+    const newUser = await User.create({
+        name:name,
+        email:email,
+        phone:phone,
+        imageName:req.file.filename,
+        imagePath:req.file.path,
+        password:password
+        
+    })
+        
+    
+    // try{
+       
+    //     const newUser = await User.create({
+    //         name:name,
+    //         email:email,
+    //         phone:phone,
+    //         imageName:req.file.filename,
+    //         imagePath:req.file.path,
+    //         password:password
             
-        })
-        // if(newUser)
-        // {
-        //     return res.status(201).json({"id":newUser._id,"email":newUser.email});
-        //     return res.send("success")
-        //?  Cannot set headers after they are sent to the client
-        // }
-    }
-    catch(err)
-    {
-        console.log('error here');
-        console.log(err);
-    }
+    //     })
+    //     // if(newUser)
+    //     // {
+    //     //     return res.status(201).json({"id":newUser._id,"email":newUser.email});
+    //     //     return res.send("success")
+    //     //?  Cannot set headers after they are sent to the client
+    //     // }
+    // }
+    // catch(err)
+    // {
+    //     // console.log('error here');
+    //     console.log(err);
+    // }
 }
 
 //@desc logins in a user
