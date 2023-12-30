@@ -7,8 +7,22 @@ const { upload } = require("../middleware/imageUploads");
 //@route get /api/users/signup
 //@acess public
 const signupUser = async (req,res) => {
-    
+    if (!req.file) {
+        res.status(400);
+        throw new Error("Image is mandatory");
+    }
     const {email,phone,name,password} = req.body;
+    // if((!email && !phone) || !name || !password )
+    // {
+    //     res.status(400);
+    //     throw new Error("Fields are mandatory");
+    // }
+    // const userAvailable = await User.findOne({email:email});
+    // if(userAvailable)
+    // {
+    //     res.status(400);
+    //     throw new Error("User already exists");
+    // }
     
     try{
        
@@ -21,16 +35,10 @@ const signupUser = async (req,res) => {
             password:password
             
         })
-        // if(newUser)
-        // {
-        //     return res.status(201).json({"id":newUser._id,"email":newUser.email});
-        //     return res.send("success")
-        //?  Cannot set headers after they are sent to the client
-        // }
+        res.json({"id":newUser._id,"email":newUser.email});
     }
     catch(err)
     {
-        console.log('error here');
         console.log(err);
     }
 }

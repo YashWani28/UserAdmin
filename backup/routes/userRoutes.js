@@ -5,7 +5,7 @@ const validateUser = require("../middleware/UserValidation");
 const router = express.Router();
 const multer = require("multer");
 
-router.post("/signup", (req, res, next) => { 
+router.post("/signup", (req, res) => {
   return new Promise((resolve, reject) => {
     upload.single("image")(req, res, (err) => {
       if (err) {
@@ -15,12 +15,12 @@ router.post("/signup", (req, res, next) => {
       }
     });
   })
-    .then(() => validateUser(req, res, next))
+    .then(() => validateUser(req, res))
     .then(() => signupUser(req, res))
-    // .catch((error) => {
-    //   // Handle errors
-    //   res.status(500).send("Error during signup: " + error.message);
-    // });
+    .catch((error) => {
+      // Handle errors
+      res.status(500).send("Error during signup: " + error.message);
+    });
 });
 
 router.post("/login", loginUser);
