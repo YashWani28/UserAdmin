@@ -10,11 +10,14 @@ const userSchema = mongoose.Schema(
             type:String,
             // required: [true,"Please add user email address"],
             unique: [true,"Email address already taken"],
+            sparse:true,
+
         },
         phone:{
             type:String,
             // required: [true,"Please add user phone number"],
             unique: [true,"Phone already taken"],
+            sparse:true,
         },
         imageName:{
             type:String,

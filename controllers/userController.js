@@ -8,18 +8,67 @@ const { upload } = require("../middleware/imageUploads");
 //@acess public
 const signupUser = async (req,res) => {
     
-    const {email,phone,name,password} = req.body;
+    const {phone,email,name,password} = req.body;
    
-       
-    const newUser = await User.create({
-        name:name,
-        email:email,
-        phone:phone,
-        imageName:req.file.filename,
-        imagePath:req.file.path,
-        password:password
-        
-    })
+    if(!email)
+    {
+        try{
+            const newUser = await User.create({
+                name:name,
+                phone:phone,
+                imageName:req.file.filename,
+                imagePath:req.file.path,
+                password:password
+                
+            })
+        }
+        catch(err)
+        {
+           
+            console.log(err);
+            res.end();
+        }
+    }
+    
+    else if(!phone)
+    {
+        try{
+            const newUser = await User.create({
+                name:name,
+                email:email,
+                imageName:req.file.filename,
+                imagePath:req.file.path,
+                password:password
+                
+            })
+        }
+        catch(err)
+        {
+           
+            console.log(err);
+            res.end();
+        }
+    }
+    else{
+        try{
+            const newUser = await User.create({
+                name:name,
+                email:email,
+                phone:phone,
+                imageName:req.file.filename,
+                imagePath:req.file.path,
+                password:password
+                
+            })
+        }
+        catch(err)
+        {
+           
+            console.log(err);
+            res.end();
+        }
+    }
+    
         
     
     // try{

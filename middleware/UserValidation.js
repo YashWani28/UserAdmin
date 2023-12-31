@@ -8,10 +8,10 @@ const asyncHandler = require("express-async-handler");
 
 const deleteFile = (filePath) => {
     return new Promise((resolve, reject) => {
-      
+
         // console.log(filePath);
-        const absolutePath =  `E:\\Web-Development\\NodeJs\\UserAdmin App\\${filePath}`;
-   
+        const absolutePath = `E:\\Web-Development\\NodeJs\\UserAdmin App\\${filePath}`;
+
         fs.unlink(absolutePath, (err) => {
             if (err) {
                 console.error(`Error deleting file: ${filePath}`);
@@ -27,30 +27,40 @@ const deleteFile = (filePath) => {
 };
 
 
-const validateUser = asyncHandler(async(req,res,next)=>{
-    
-    const {email,phone,name,password} = req.body;
-    // console.log(email,phone,name,password);
-    let isError=false;
-    if((!email && !phone) || !name || !password )
-    {
+const validateUser = asyncHandler(async (req, res, next) => {
+
+    const { email, phone, name, password } = req.body;
+    console.log(email, phone, name, password);
+
+    if ((!email && !phone) || !name || !password) {
         await deleteFile(req.file.path);
         res.status(400);
-        isError = true;
+
         throw new Error("Fields are mandatory");
-        
+
     }
-    const userAvailable = await User.findOne({email:email});
-    if(userAvailable)
-    {
+
+    let userAvailable;
+    console.log(userAvailable);
+    if (email || phone) {
+        // Check for either email or phone
+        if(email)
+        {
+            userAvailable = await User.findOne({ email :email});
+            
+        }
+        else{
+            userAvailable = await User.findOne({ phone :phone});
+
+        }
+    }
+    console.log(userAvailable);
+    if (userAvailable) {
         await deleteFile(req.file.path);
         res.status(400);
-        isError = true;
         throw new Error("User already exists");
-        
     }
-    
+
 })
 
 module.exports = validateUser;
-    
