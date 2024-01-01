@@ -1,15 +1,20 @@
 const express = require('express');
 const User = require('../models/User');
 const { upload } = require("../middleware/imageUploads");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
+const result = require('dotenv').config();
+
 
 
 //@desc register a user
 //@route get /api/users/signup
 //@acess public
-const signupUser = async (req,res) => {
+const signupUser = asyncHandler(async (req,res) => {
     
     const {phone,email,name,password} = req.body;
-   
+    const hashedPassword = await bcrypt.hash(password,10); // here 10 is the level of salting
     if(!email)
     {
         try{
@@ -18,9 +23,10 @@ const signupUser = async (req,res) => {
                 phone:phone,
                 imageName:req.file.filename,
                 imagePath:req.file.path,
-                password:password
+                password:hashedPassword,
                 
             })
+            res.send("user created successfully");
         }
         catch(err)
         {
@@ -38,9 +44,11 @@ const signupUser = async (req,res) => {
                 email:email,
                 imageName:req.file.filename,
                 imagePath:req.file.path,
-                password:password
+                password:hashedPassword
                 
             })
+            res.send("user created successfully");
+
         }
         catch(err)
         {
@@ -57,9 +65,11 @@ const signupUser = async (req,res) => {
                 phone:phone,
                 imageName:req.file.filename,
                 imagePath:req.file.path,
-                password:password
+                password:hashedPassword,
                 
             })
+            res.send("user created successfully");
+
         }
         catch(err)
         {
@@ -94,14 +104,49 @@ const signupUser = async (req,res) => {
     //     // console.log('error here');
     //     console.log(err);
     // }
-}
+})
 
 //@desc logins in a user
 //@route get /api/users/login
 //@acess public
-const loginUser = async (req,res) => {
-    
-}
+const loginUser =asyncHandler( async (req, res) => {
+    const { email, phone, password } = req.body;
+    console.log(`email:${email} ; phone:${phone} ; password:${password}`);
+    if (!(email || phone)) {
+        res.status(400);
+        throw new Error("Email or phone is required");
+    } 
+    if(!password)
+    {
+        res.status(400);
+        throw new Error("Password is required");
+    }
+    let user;
+    if(!email)
+    {
+        user = await User.findOne({phone:phone});
+    }
+    else{
+        user = await User.findOne({email:email});
+    }
+    console.log(user);
+    if(user && (await bcrypt.compare(password,user.password)))
+    {
+        const jwtToken =  jwt.sign({user:{
+            email:user.email,
+            id:user._id,
+            phone:user.phone,
+        }},process.env.JWT_SECRET,{expiresIn:"1m"});
+        res.status(200).json({"accessToken":jwtToken}); 
+    }
+    else{
+        res.status(401);
+        throw new Error("Kindly recheck credentials");
+    }
+
+
+})
+
 
 //@desc modify a user's details
 //@route get /api/users/signup
