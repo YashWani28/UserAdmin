@@ -44,6 +44,6 @@ router.put("/modify",validateToken,async (req, res, next) => {
 });
 
 
-router.delete("/delete", deleteUser);
+router.delete("/delete",validateToken, deleteUser);
 
 module.exports = router;

@@ -217,9 +217,24 @@ const modifyUser = asyncHandler(async (req,res) => {
 //@desc delete a user
 //@route get /api/users/delete
 //@acess private..as only logged in users can delete their accounts
-const deleteUser = async (req,res) => {
-    res.send("this is delete page");
-}
+const deleteUser = asyncHandler(async (req,res) => {
+    let email = req.user.email;
+    let phone = req.user.phone;    
+    if (email || phone) {
+        // search by either email or phone
+        let user;
+        if(email)
+        {
+           user = await User.findOneAndDelete({email:email});
+        }
+        else{
+           user = await User.findOneAndDelete({phone:phone});    
+        }
+        deleteFile(user.imagePath);
+        console.log(user);
+        res.send("user deleted successfully");
+    }
+})
 
 
 module.exports = {signupUser,loginUser,modifyUser,deleteUser};
