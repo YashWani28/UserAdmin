@@ -150,7 +150,7 @@ const loginUser =asyncHandler( async (req, res) => {
     else{
         user = await User.findOne({email:email});
     }
-    console.log(user);
+    // console.log(user);
     if(user && (await bcrypt.compare(password,user.password)))
     {
         const jwtToken =  jwt.sign({user:{
@@ -168,6 +168,23 @@ const loginUser =asyncHandler( async (req, res) => {
 
 })
 
+//@desc get individual users' details
+//@route get /api/users/getDetails
+//@acess private..as only logged in users can get their details
+const getDetails = asyncHandler(async(req,res)=>{
+    const {email,phone} = req.user;
+    if (email || phone) {
+        let user;
+        if(email)
+        {
+           user = await User.findOne({email:email});
+        }
+        else{
+           user = await User.findOne({phone:phone});    
+        }  
+        res.json(user);
+    }
+})
 
 //@desc modify a user's details
 //@route get /api/users/signup
@@ -177,10 +194,14 @@ const modifyUser = asyncHandler(async (req,res) => {
     // then based on it, it will search for the user in the databse
     // then it will modify the name and image according to request
     // for name it can directly modify, but for file, it needs to write path to the new file in the db and delete the earlier file
+    
+    const allowedKeys = ['name'];
+    const invalidKeys = Object.keys(req.body).filter(key => !allowedKeys.includes(key));
+    // console.log(invalidKeys.length); 
+
     let email = req.user.email;
     let phone = req.user.phone;
     let user;
-    
     if (email || phone) {
         // search by either email or phone
         if(email)
@@ -201,7 +222,13 @@ const modifyUser = asyncHandler(async (req,res) => {
             },{new:false});
             await deleteFile(user.imagePath);
         }
-        res.send("user modified");
+        if (invalidKeys.length > 0 || !req.file) {
+            res.send("Only name and profile image could be modified !!")
+        }
+        else{
+            res.send("user modified");
+
+        }
     }
     // if(req.file)
     // {
@@ -237,4 +264,4 @@ const deleteUser = asyncHandler(async (req,res) => {
 })
 
 
-module.exports = {signupUser,loginUser,modifyUser,deleteUser};
+module.exports = {signupUser,loginUser,modifyUser,deleteUser,getDetails};

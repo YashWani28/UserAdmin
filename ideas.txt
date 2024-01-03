@@ -1,0 +1,12 @@
+-creation of admin account requires an admin password secret which is saved in the server as an environment variable
+-admin accounts will have role set to admin
+-all the routes under admin will check if decoded jwt token data has role-->user...if so then only they can be accessed..there will be a separate roll checking middleware for this...if token belongs to user then it will alert user that accessing admin account as a user is not possible..add a double to check to see that if the role in jwt is admin then does the admin exist in the admin table of the database
+-for admin getAllUsers: validateTokenHandler --> AdminValidation --> controller
+-for admin modification of user, middleware sequence --> validateTokenHandler --> AdminValidation --> imageUpload --> controller(which will delete the previous email from uploads)
+
+admin/createAdmin
+admin/loginAdmin
+admin/getAllUsers...admin verifying middleware
+admin/modifyUser...admin verifying middleware
+admin/deleteUser...admin verifying middleware
+

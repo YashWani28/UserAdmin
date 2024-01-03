@@ -1,5 +1,5 @@
 const express = require('express');
-const { signupUser, loginUser, modifyUser, deleteUser } = require('../controllers/userController');
+const { signupUser, loginUser, modifyUser, deleteUser,getDetails } = require('../controllers/userController');
 const { upload } = require("../middleware/imageUploads");
 const validateUser = require("../middleware/UserValidation");
 const validateToken = require("../middleware/validateTokenHandler");
@@ -25,6 +25,8 @@ router.post("/signup", (req, res, next) => {
 
 router.post("/login", loginUser);
 
+//to get user information
+router.get("/getDetails",validateToken,getDetails)
 
 // router.put("/modify",validateToken ,modifyUser);
 router.put("/modify",validateToken,async (req, res, next) => { 

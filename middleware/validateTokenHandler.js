@@ -29,6 +29,10 @@ const validateToken = asyncHandler(async(req,res,next) => {
             throw new Error("Token is missing")
         }
     }
+    else{
+        res.status(401);
+        throw new Error("Token is missing")
+    }
 })
 
 module.exports = validateToken;
