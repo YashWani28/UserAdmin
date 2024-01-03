@@ -98,8 +98,8 @@ const getAllUsers = asyncHandler(async(req,res)=>{
 //@acess private...
 const modifyUser = asyncHandler(async(req,res)=>{
     //here we will find one user on the basis of the user id that the admin provided in the request body
-    console.log(req.file.filename,req.file.path);
-    console.log(req.body);
+    // console.log(req.file.filename,req.file.path);
+    // console.log(req.body);
     const {email,phone} = req.body;
     if(email || phone)
     {
@@ -153,7 +153,7 @@ const modifyUser = asyncHandler(async(req,res)=>{
 //@route delete /api/users/modifyUser
 //@acess private...
 const deleteUser = asyncHandler(async(req,res)=>{
-
+    
     const user = await User.findById(req.params.id);
     if (!user) {
         res.status(404);

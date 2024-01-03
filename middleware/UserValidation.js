@@ -30,7 +30,7 @@ const deleteFile = (filePath) => {
 const validateUser = asyncHandler(async (req, res, next) => {
 
     const { email, phone, name, password } = req.body;
-    console.log(email, phone, name, password);
+    // console.log(email, phone, name, password);
 
     if ((!email && !phone) || !name || !password) {
         await deleteFile(req.file.path);
@@ -41,7 +41,7 @@ const validateUser = asyncHandler(async (req, res, next) => {
     }
 
     let userAvailable;
-    console.log(userAvailable);
+    // console.log(userAvailable);
     if (email || phone) {
         // Check for either email or phone
         if(email)
@@ -54,7 +54,7 @@ const validateUser = asyncHandler(async (req, res, next) => {
 
         }
     }
-    console.log(userAvailable);
+    // console.log(userAvailable);
     if (userAvailable) {
         await deleteFile(req.file.path);
         res.status(400);

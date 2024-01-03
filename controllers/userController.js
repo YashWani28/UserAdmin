@@ -99,32 +99,6 @@ const signupUser = asyncHandler(async (req,res) => {
             res.end();
         }
     }
-    
-        
-    
-    // try{
-       
-    //     const newUser = await User.create({
-    //         name:name,
-    //         email:email,
-    //         phone:phone,
-    //         imageName:req.file.filename,
-    //         imagePath:req.file.path,
-    //         password:password
-            
-    //     })
-    //     // if(newUser)
-    //     // {
-    //     //     return res.status(201).json({"id":newUser._id,"email":newUser.email});
-    //     //     return res.send("success")
-    //     //?  Cannot set headers after they are sent to the client
-    //     // }
-    // }
-    // catch(err)
-    // {
-    //     // console.log('error here');
-    //     console.log(err);
-    // }
 })
 
 //@desc logins in a user
@@ -132,7 +106,7 @@ const signupUser = asyncHandler(async (req,res) => {
 //@acess public
 const loginUser =asyncHandler( async (req, res) => {
     const { email, phone, password } = req.body;
-    console.log(`email:${email} ; phone:${phone} ; password:${password}`);
+    // console.log(`email:${email} ; phone:${phone} ; password:${password}`);
     if (!(email || phone)) {
         res.status(400);
         throw new Error("Email or phone is required");
@@ -258,7 +232,7 @@ const deleteUser = asyncHandler(async (req,res) => {
            user = await User.findOneAndDelete({phone:phone});    
         }
         deleteFile(user.imagePath);
-        console.log(user);
+        // console.log(user);
         res.send("user deleted successfully");
     }
 })

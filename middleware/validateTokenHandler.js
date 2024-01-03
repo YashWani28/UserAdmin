@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const validateToken = asyncHandler(async(req,res,next) => {
     let token;
-    console.log("hi");
+    // console.log("hi");
     // while sending requests from client, create Authorization header in headers and add the jwt token as its value
     let authHeader = req.headers.Authorization || req.headers.authorization;
     if(authHeader && authHeader.startsWith("Bearer"))
